@@ -38,7 +38,7 @@ class TestFileStorageDocs(unittest.TestCase):
                          "Found code style errors (and warnings).")
 
     def test_pycodestyle_conformance_test_file_storage(self):
-        """Test tests/test_models/test_file_storage.py conforms to pycodestyle."""
+        """Test tests/test_models/test_file_storage.py pycodestyle"""
         pycodestyles = pycodestyle.StyleGuide(quiet=True)
         result = pycodestyles.check_files(['tests/test_models/test_engine/\
 test_file_storage.py'])
