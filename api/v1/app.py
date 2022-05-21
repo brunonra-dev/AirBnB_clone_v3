@@ -4,6 +4,7 @@ starts a Flask web application
 """
 from models import storage
 from api.v1.views import app_views
+from api.v1.views.index import *
 from flask import Flask
 
 
