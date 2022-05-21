@@ -18,13 +18,14 @@ def status():
     """returns status api"""
     return jsonify(status="Ok")
 
+
 @app_views.route('/stats')
 def stats():
     """Create an endpoint that retrieves
     the number of each objects by type"""
-    return jsonify(amenities = storage.count(Amenity),
-                   cities = storage.count(City),
-                   places = storage.count(Place),
-                   reviews = storage.count(Review),
-                   states = storage.count(State), 
-                   users = storage.count(User))
+    return jsonify(amenities=storage.count(Amenity),
+                   cities=storage.count(City),
+                   places=storage.count(Place),
+                   reviews=storage.count(Review),
+                   states=storage.count(State),
+                   users=storage.count(User))
