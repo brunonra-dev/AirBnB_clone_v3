@@ -79,8 +79,12 @@ class DBStorage:
         """Returns the object based on the class and its ID
         Otherwise returns None"""
         objs = self.all(cls)
-        if objs:
-            return objs['{}.{}'.format(cls.__name__, id)]
+        obj = None
+        for key in objs.keys():
+            if key == '{}.{}'.format(cls.__name__, id):
+                obj = objs[key]
+        if obj:
+            return obj
         else:
             return None
 
