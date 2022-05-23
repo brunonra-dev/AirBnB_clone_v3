@@ -1,6 +1,6 @@
 #!/usr/bin/python3
 """
-States view
+City view
 """
 from api.v1.views import app_views
 from flask import jsonify, abort, request
@@ -13,7 +13,7 @@ from models.city import City
                  strict_slashes=False,
                  methods=["GET"])
 def get_all_city(state_id):
-    """Retrieves the list of all State objects"""
+    """Retrieves the list of all City objects"""
     cities = storage.all(City)
     state = storage.get(State, state_id)
     if state is None:
@@ -29,7 +29,7 @@ def get_all_city(state_id):
                  strict_slashes=False,
                  methods=["GET"])
 def get_city(city_id):
-    """Retrieves a State object"""
+    """Retrieves a City object"""
     city = storage.get(City, city_id)
     if city:
         return jsonify(city.to_dict())
@@ -41,7 +41,7 @@ def get_city(city_id):
                  strict_slashes=False,
                  methods=["DELETE"])
 def delete_city(city_id):
-    """Delete a State object"""
+    """Delete a City object"""
     city = storage.get(City, city_id)
     if city:
         storage.delete(city)
@@ -55,7 +55,7 @@ def delete_city(city_id):
                  strict_slashes=False,
                  methods=["POST"])
 def create_city(state_id):
-    """Creates a State object"""
+    """Creates a City object"""
     state = storage.get(State, state_id)
     if state is None:
         abort(404)
@@ -74,7 +74,7 @@ def create_city(state_id):
                  strict_slashes=False,
                  methods=["PUT"])
 def update_city(city_id):
-    """Update a State object"""
+    """Update a City object"""
     city = storage.get(City, city_id)
     if city is None:
         abort(404)
