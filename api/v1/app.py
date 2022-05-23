@@ -5,6 +5,7 @@ starts a Flask web application
 from os import getenv
 from api.v1.views import app_views
 from flask import Flask, jsonify
+from api.v1.views.index import *
 from models import storage
 
 
@@ -26,4 +27,4 @@ def not_found(e):
 if __name__ == '__main__':
     app.run(host=getenv('HBNB_API_HOST', default='0.0.0.0'),
             port=getenv('HBNB_API_PORT', default='5000'),
-            threaded=True, debug=True)
+            threaded=True)
