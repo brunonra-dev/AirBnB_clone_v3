@@ -14,14 +14,12 @@ from models import storage
                  methods=["GET"])
 def get_all_city(state_id):
     """Retrieves the list of all City objects"""
-    cities = storage.all(City)
     state = storage.get(State, state_id)
     if state is None:
         abort(404)
     city_objs = []
-    for obj in cities.values():
-        if obj.state_id == state_id:
-            city_objs.append(obj.to_dict())
+    for obj in state.cities:
+        city_objs.append(obj.to_dict())
     return jsonify(city_objs)
 
 
@@ -63,9 +61,8 @@ def create_city(state_id):
     if req is None:
         abort(400, "Not a JSON")
     if 'name' in req:
-        req['state_id'] = state_id
         city = City(**req)
-        storage.new(city)
+        city.state_id = state_id
         city.save()
         return jsonify(city.to_dict()), 201
     else:
@@ -85,7 +82,7 @@ def update_city(city_id):
         abort(400, "Not a JSON")
     else:
         for key, value in req.items():
-            if key in ['id', 'created_at', 'updated_at']:
+            if key in ['id', 'state_id', 'created_at', 'updated_at']:
                 pass
             else:
                 setattr(city, key, value)
