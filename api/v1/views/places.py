@@ -67,12 +67,11 @@ def create_place(city_id):
     if 'name' not in place:
         abort(400, "Missing name")
     if 'user_id' not in place.keys():
-        abort(400, "Missing user_id")
+        abort(400, "Missing name")
     if user is None:
         abort(404)
-    place['city_id'] = city_id
     new = Place(**place)
-    storage.new(new)
+    place.city_id = city_id
     new.save()
     return jsonify(new.to_dict()), 201
 
