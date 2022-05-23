@@ -1,6 +1,6 @@
 #!/usr/bin/python3
 """
-City view
+City view doc
 """
 from flask import jsonify, abort, request
 from api.v1.views import app_views
