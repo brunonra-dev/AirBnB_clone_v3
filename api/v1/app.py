@@ -5,7 +5,6 @@ starts a Flask web application
 from os import getenv
 from api.v1.views import app_views
 from flask import Flask, jsonify
-from api.v1.views.index import *
 from models import storage
 
 
@@ -21,7 +20,7 @@ def teardown(ex):
 
 @app.errorhandler(404)
 def not_found(e):
-    return jsonify(error="Not found"), 404
+    return jsonify({'error': "Not found"}), 404
 
 
 if __name__ == '__main__':
