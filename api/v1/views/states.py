@@ -9,7 +9,7 @@ from models.state import State
 
 
 @app_views.route('/states', strict_slashes=False, methods=["GET"])
-def get():
+def get_all_states():
     """Retrieves the list of all State objects"""
     objs = storage.all(State)
     all_objs = []
