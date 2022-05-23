@@ -7,6 +7,7 @@ from flask import jsonify, abort, request
 from models import storage
 from models.city import City
 from models.place import Place
+from models.user import User
 
 
 @app_views.route('/cities/<string:city_id>/places',
@@ -60,14 +61,19 @@ def create_place(city_id):
     if city is None:
         abort(404)
     place = request.get_json(force=True, silent=True)
+    user = storage.get(User, place['user_id'])
     if place is None:
         abort(400, "Not a JSON")
-    if 'name' in place:
-        st = Place(**place, city_id=city_id)
-        st.save()
-        return jsonify(st.to_dict()), 201
-    else:
+    if 'name' not in place:
         abort(400, "Missing name")
+    if 'user_id' not in place.keys():
+        abort(400, "Missing user_id")
+    if user is None:
+        abort(404)
+    new = Place(**place, city_id=city_id)
+    storage.new(new)
+    new.save()
+    return jsonify(new.to_dict()), 201
 
 
 @app_views.route('/places/<string:place_id>',
@@ -83,7 +89,7 @@ def update_place(place_id):
         abort(400, "Not a JSON")
     else:
         for key, value in req.items():
-            if key in ['id', 'created_at', 'updated_at']:
+            if key in ['id', 'user_id', 'city_id', 'created_at', 'updated_at']:
                 pass
             else:
                 setattr(place, key, value)
