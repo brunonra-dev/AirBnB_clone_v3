@@ -58,7 +58,7 @@ def create_amenity():
         abort(400, "Missing name")
 
 
-@app_views.route('/states/<string:amenity_id>',
+@app_views.route('/amenities/<string:amenity_id>',
                  strict_slashes=False,
                  methods=["PUT"])
 def update_amenity(amenity_id):
