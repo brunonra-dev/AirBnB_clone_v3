@@ -11,10 +11,12 @@ from models import storage
 app = Flask(__name__)
 app.register_blueprint(app_views)
 
+
 @app.teardown_appcontext()
 def teardown(ex):
     """calls storage.close()"""
     storage.close()
+
 
 @app.errorhandler(404)
 def not_found(e):
