@@ -70,7 +70,7 @@ def create_review(place_id):
         user = storage.get(User, review['user_id'])
         if user is None:
             abort(404)
-        new = Place(**review)
+        new = Review(**review)
         new.place_id = place_id
         new.save()
         return jsonify(new.to_dict()), 201
