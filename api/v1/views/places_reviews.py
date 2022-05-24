@@ -61,8 +61,6 @@ def create_review(place_id):
     review = request.get_json(force=True, silent=True)
     if review is None:
         abort(400, "Not a JSON")
-    if 'name' not in review:
-        abort(400, "Missing name")
     if 'user_id' not in review.keys():
         abort(400, "Missing user_id")
     if 'text' not in review.keys():
