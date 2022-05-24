@@ -65,6 +65,8 @@ def create_review(place_id):
         abort(400, "Missing name")
     if 'user_id' not in review.keys():
         abort(400, "Missing user_id")
+    if 'text' not in review.keys():
+        abort(400, "Missing text")
     user = storage.get(User, review['user_id'])
     if user is None:
         abort(404)
