@@ -5,7 +5,6 @@ Places view
 from api.v1.views import app_views
 from flask import jsonify, abort, request
 from models import storage
-from models.city import City
 from models.place import Place
 from models.user import User
 from models.review import Review
@@ -56,8 +55,8 @@ def delete_review(review_id):
                  methods=["POST"])
 def create_review(place_id):
     """Creates a Place object"""
-    city = storage.get(City, place_id)
-    if city is None:
+    place = storage.get(Place, place_id)
+    if place is None:
         abort(404)
     review = request.get_json(force=True, silent=True)
     if review is None:
@@ -65,7 +64,7 @@ def create_review(place_id):
     if 'name' not in review:
         abort(400, "Missing name")
     if 'user_id' not in review.keys():
-        abort(400, "Missing name")
+        abort(400, "Missing user_id")
     user = storage.get(User, review['user_id'])
     if user is None:
         abort(404)
@@ -86,11 +85,10 @@ def update_review(review_id):
     req = request.get_json(force=True, silent=True)
     if req is None:
         abort(400, "Not a JSON")
-    else:
-        for key, value in req.items():
-            if key in ['id', 'user_id', 'place_id', 'created_at', 'updated_at']:
-                pass
-            else:
-                setattr(review, key, value)
-        storage.save()
-        return jsonify(review.to_dict()), 200
+    for key, value in req.items():
+        if key in ['id', 'user_id', 'place_id', 'created_at', 'updated_at']:
+            pass
+        else:
+            setattr(review, key, value)
+    storage.save()
+    return jsonify(review.to_dict()), 200
