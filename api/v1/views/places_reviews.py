@@ -15,10 +15,10 @@ from models.review import Review
                  methods=["GET"])
 def get_all_reviews(place_id):
     """Retrieves the list of all Place objects"""
+    list_reviews = []
     place = storage.get(Place, place_id)
     if not place:
         abort(404)
-    list_reviews = []
     for review in place.reviews:
         list_reviews.append(review.to_dict())
     return jsonify(list_reviews)
@@ -36,7 +36,7 @@ def get_review(review_id):
         abort(404)
 
 
-@app_views.route('/reviews/<string:review_id>',
+@app_views.route('/reviews/<review_id>',
                  strict_slashes=False,
                  methods=["DELETE"])
 def delete_review(review_id):
@@ -50,7 +50,7 @@ def delete_review(review_id):
         abort(404)
 
 
-@app_views.route('/places/<string:place_id>/reviews',
+@app_views.route('/places/<place_id>/reviews',
                  strict_slashes=False,
                  methods=["POST"])
 def create_review(place_id):
@@ -61,17 +61,19 @@ def create_review(place_id):
     review = request.get_json(force=True, silent=True)
     if review is None:
         abort(400, "Not a JSON")
+    review['place_id'] = place_id
     if 'user_id' not in review.keys():
         abort(400, "Missing user_id")
-    if 'text' not in review.keys():
+    elif 'text' not in review.keys():
         abort(400, "Missing text")
-    user = storage.get(User, review['user_id'])
-    if user is None:
-        abort(404)
-    review['place_id'] = place_id
-    new = Place(**review)
-    new.save()
-    return jsonify(new.to_dict()), 201
+    else:
+        user = storage.get(User, review['user_id'])
+        if user is None:
+            abort(404)
+        new = Place(**review)
+        new.place_id = place_id
+        new.save()
+        return jsonify(new.to_dict()), 201
 
 
 @app_views.route('/reviews/<string:review_id>',
@@ -85,10 +87,12 @@ def update_review(review_id):
     req = request.get_json(force=True, silent=True)
     if req is None:
         abort(400, "Not a JSON")
-    for key, value in req.items():
-        if key in ['id', 'user_id', 'place_id', 'created_at', 'updated_at']:
-            pass
-        else:
-            setattr(review, key, value)
-    storage.save()
-    return jsonify(review.to_dict()), 200
+    else:
+        for key, value in req.items():
+            if key in ['id', 'user_id', 'place_id',
+                       'created_at', 'updated_at']:
+                pass
+            else:
+                setattr(review, key, value)
+        storage.save()
+        return jsonify(review.to_dict()), 200
